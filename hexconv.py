@@ -16,6 +16,11 @@ def createpal(argv):
         g = g%32
         b = b%32
 
+        print("r= "+str(r))
+        print("g= "+str(g))
+        print("b= "+str(b))
+        print("\n")
+
         rb = bin(r).replace("0b","")
         gb = bin(g).replace("0b","")
         bb = bin(b).replace("0b","")
@@ -31,8 +36,8 @@ def createpal(argv):
         final += gb
         final += bb
         
-        fo.write(int(final[0:7],2).to_bytes(1, "little"))
-        fo.write(int(final[8:15],2).to_bytes(1, "little"))
+        fo.write(int(final,2).to_bytes(2, "big"))
+        
 
     f.close()
     fo.close()
