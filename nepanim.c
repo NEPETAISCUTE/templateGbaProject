@@ -1,0 +1,37 @@
+#include "nepanim.h"
+
+
+OBJ_ATTR obj_buffer[128];
+OBJ_AFFINE* obj_aff_buffer = (OBJ_AFFINE*)obj_buffer;
+
+int main()
+{
+    memcpy32(&tile_mem[4][0], sprites,  sprites_size);
+    memcpy32(pal_obj_mem, sprPal, sprPal_size);
+
+    oam_init(obj_buffer, 128);
+    REG_DISPCNT = DCNT_MODE0 | DCNT_OBJ | DCNT_OBJ_1D;
+
+
+    u32 tid = 0;
+    OBJ_ATTR* anim = &obj_buffer[0];
+
+    obj_set_attr(anim,
+    ATTR0_SQUARE,
+    ATTR1_SIZE_16,
+    ATTR2_PALBANK(0) | tid);
+
+    obj_set_pos(anim, 0x7F, 0x7F);
+
+    while(true)
+    {
+        vid_vsync();
+        if(tid>3)
+            tid = 0;
+
+        anim->attr2= ATTR2_BUILD(tid, 0, 0);
+
+        oam_copy(oam_mem, obj_buffer, 1);
+    }
+    return 0;
+}
